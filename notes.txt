@@ -1,0 +1,160 @@
+1. EDR (Endpoint Detection and Response)
+Common Issues:
+
+Agent not forwarding logs
+
+Policy misconfiguration
+
+TLS/Port blocked
+
+Steps:
+
+Check EDR Agent status on the endpoint – ensure it is running.
+
+Verify policy settings in the EDR console for log forwarding/SIEM integration.
+
+Check network connectivity from endpoint to SIEM (e.g., ping, telnet <SIEM-IP> <port>).
+
+Review EDR logs locally (%ProgramData% or /var/log) for errors.
+
+Restart EDR service/agent if logs are not being sent.
+
+Validate logs in SIEM using a search for the hostname or endpoint ID.
+
+2. Proxy (e.g., Blue Coat, Zscaler, Squid)
+Common Issues:
+
+Syslog misconfiguration
+
+DNS/firewall blocks
+
+Logs not parsed properly
+
+Steps:
+
+Confirm proxy logging is enabled for all categories (access, threat, etc.).
+
+Check syslog target configuration – SIEM IP, port, protocol (UDP/TCP).
+
+Test connectivity to SIEM from the proxy using diagnostics or CLI.
+
+Review proxy log files to confirm logs are generated.
+
+Send a test request through the proxy and validate visibility in SIEM.
+
+Verify parsing rules (field extraction) on the SIEM side.
+
+3. Antivirus (e.g., Symantec, McAfee, Defender AV)
+Common Issues:
+
+AV agent not reporting
+
+Central console misconfigured
+
+Log filtering issues
+
+Steps:
+
+Check that the AV agent is updated and active on the endpoint.
+
+Verify log forwarding is enabled in the central AV console (e.g., ePO, SEPM).
+
+Ensure the SIEM collector or agent is receiving AV logs.
+
+Review sample virus detection or test with EICAR file.
+
+Check the forwarding format (CEF, LEEF, syslog).
+
+Run an AV test alert and search logs in SIEM.
+
+4. DLP (Data Loss Prevention)
+Common Issues:
+
+Policy violation logs not forwarded
+
+DLP server misconfigured
+
+SSL inspection interfering with logging
+
+Steps:
+
+Ensure policies are triggering violations by testing with dummy sensitive data.
+
+Check DLP console settings for syslog/API forwarding to SIEM.
+
+Test network route to SIEM from the DLP server.
+
+Inspect logs at the DLP side for transmission failures.
+
+Search logs in SIEM using content category or type (e.g., “PII” or “Credit Card”).
+
+Review parsing rules in SIEM for DLP fields like sender, content_type, action.
+
+5. NAC (Network Access Control) – e.g., Cisco ISE, Aruba ClearPass
+Common Issues:
+
+Authentication events missing
+
+CoA logs not parsed
+
+Time mismatch between NAC and SIEM
+
+Steps:
+
+Verify RADIUS/802.1X event generation in the NAC system.
+
+Ensure syslog export is enabled and points to the SIEM.
+
+Check time sync (NTP) between NAC and SIEM.
+
+Validate parsing rules in SIEM for MAC address, switch port, and username.
+
+Run test logins or guest access events and verify logs in SIEM.
+
+Confirm parsing enriches logs with device type, user role, and location.
+
+6. Firewall (e.g., Palo Alto, Fortinet, Cisco ASA)
+Common Issues:
+
+Incorrect log levels
+
+Logs not forwarded or rate-limited
+
+Parsing errors
+
+Steps:
+
+Enable logging for allowed and denied traffic.
+
+Configure syslog/LEEF/CEF correctly in the firewall log settings.
+
+Restart or reload logging service after configuration changes.
+
+Check if the SIEM listener is receiving firewall logs.
+
+Generate test traffic to and from the firewall, then validate in SIEM.
+
+Verify that logs include critical fields like src_ip, dst_ip, port, action, and rule.
+
+7. Active Directory (AD)
+Common Issues:
+
+Audit policies not enabled
+
+Forwarding service (e.g., WEF) not working
+
+SID resolution issues in SIEM
+
+Steps:
+
+Enable audit policies (logon, account management, group membership).
+
+Use Windows Event Forwarding (WEF) or a SIEM agent to collect logs.
+
+Confirm if event logs (e.g., 4624, 4720) are generated locally.
+
+Search in SIEM for recent logon or group change events.
+
+Ensure SID-to-username resolution is configured correctly in SIEM.
+
+Sync GPO settings if auditing is not applied across domain controllers.
